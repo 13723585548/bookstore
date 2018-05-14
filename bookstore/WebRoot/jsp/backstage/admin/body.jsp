@@ -1,0 +1,89 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>body</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	
+	<link rel="stylesheet" type="text/css" href="<c:url value='/jsp/backstage/admin/css/body.css' />">
+	
+
+  </head>
+  
+  <body>
+    		<div class="mainBox"
+				style="height:auto!important;height:550px;min-height:550px;">
+				<h3>
+					<a href="add_product_category.html" class="actionBtn add">添加分类</a>商品分类
+				</h3>
+				<table width="100%" border="0" cellpadding="8" cellspacing="0"
+					class="tableBasic">
+					<tr>
+						<th width="120" align="left">分类名称</th>
+						<th align="left">别名</th>
+						<th align="left">简单描述</th>
+						<th width="60" align="center">排序</th>
+						<th width="80" align="center">操作</th>
+					</tr>
+					<tr>
+						<td align="left"><a href="product.php?cat_id=1">电子数码</a></td>
+						<td>digital</td>
+						<td>电子产品销售</td>
+						<td align="center">10</td>
+						<td align="center"><a
+							href="product_category.php?rec=edit&cat_id=1">编辑</a> | <a
+							href="product_category.php?rec=del&cat_id=1">删除</a></td>
+					</tr>
+					<tr>
+						<td align="left">- <a href="product.php?cat_id=4">智能手机</a></td>
+						<td>phone</td>
+						<td>智能手机销售</td>
+						<td align="center">50</td>
+						<td align="center"><a
+							href="product_category.php?rec=edit&cat_id=4">编辑</a> | <a
+							href="product_category.php?rec=del&cat_id=4">删除</a></td>
+					</tr>
+					<tr>
+						<td align="left">- <a href="product.php?cat_id=5">平板电脑</a></td>
+						<td>tabletpc</td>
+						<td>平板电脑销售</td>
+						<td align="center">50</td>
+						<td align="center"><a
+							href="product_category.php?rec=edit&cat_id=5">编辑</a> | <a
+							href="product_category.php?rec=del&cat_id=5">删除</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a href="product.php?cat_id=2">家居百货</a></td>
+						<td>home</td>
+						<td>家居百货产品销售</td>
+						<td align="center">20</td>
+						<td align="center"><a
+							href="product_category.php?rec=edit&cat_id=2">编辑</a> | <a
+							href="product_category.php?rec=del&cat_id=2">删除</a></td>
+					</tr>
+					<tr>
+						<td align="left"><a href="product.php?cat_id=3">母婴用品</a></td>
+						<td>baby</td>
+						<td>母婴用品销售</td>
+						<td align="center">30</td>
+						<td align="center"><a
+							href="product_category.php?rec=edit&cat_id=3">编辑</a> | <a
+							href="product_category.php?rec=del&cat_id=3">删除</a></td>
+					</tr>
+				</table>
+			</div>
+  </body>
+</html>

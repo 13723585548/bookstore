@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+	<mapper namespace="com.sise.bookstore.mapper.custom.OrderItemMapperCustom">
+		<!-- 查询订单条目 -->
+		<select id="selectOrderItemByOrder" resultType="com.sise.bookstore.model.entity.OrderItem">
+			SELECT 
+			  * 
+			FROM
+			  orderItem 
+			WHERE orderId = #{orderId}
+		</select>
+		<!-- 批量插入 -->
+		<insert id="insertBatch">  
+			INSERT INTO orderItem VALUES
+		    <foreach collection="list" item="item" index="index"  separator=",">
+				  (
+				    #{item.id},
+				    #{item.quantity},
+				    #{item.subtotal},
+				    #{item.bookId},
+				    #{item.bookName},
+				    #{item.currPrice},
+				    #{item.imageB},
+				    #{item.orderId}
+				  )
+			</foreach>
+	    </insert>  
+	</mapper>

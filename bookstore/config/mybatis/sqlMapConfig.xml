@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	
+<configuration>
+	<typeAliases>
+		<package name="com.sise.ssm.po" />
+	</typeAliases>
+	<!-- 由于使用spring-mybatis整合包进行扫描，这里不需要配置，必须遵循：mapper.xml和mapper.java文件同名且在一个目录  -->
+	<!-- 
+		<mappers>
+			<package name="com.sise.ssm.mapper" />
+		</mappers> 
+	-->
+</configuration>

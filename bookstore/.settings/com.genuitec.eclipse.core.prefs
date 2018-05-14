@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+validator.Checked=WebRoot/jsp/user/login.jsp,WebRoot/plugin/upload/ajaxfileupload.js,WebRoot/jquery/jquery-1.5.1.js,resource,WebRoot/plugin/validation/jquery.validate.min.js,WebRoot/jsp/backstage/login.jsp,WebRoot/menu/mymenu.js,WebRoot/jsp/user/register.jsp,config,WebRoot/plugin/calendar/calendar.js,WebRoot/plugin/jquery.validate.min.js,WebRoot/plugin/upload/jquery.form.js,WebRoot/jquery/jquery-2.2.4.js
+validator.Unchecked=

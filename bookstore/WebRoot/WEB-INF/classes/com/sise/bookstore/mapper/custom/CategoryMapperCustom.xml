@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+	<mapper namespace="com.sise.bookstore.mapper.custom.CategoryMapperCustom">
+		<!-- 查询顶级分类 -->
+		<select id="selectTopCategory" resultType="com.sise.bookstore.model.entity.Category">
+			SELECT
+				*
+			FROM
+				category
+			WHERE parentId IS NULL 
+		</select>
+		<!-- 通过父分类查询子分类 -->
+		<select id="selectCategoryByParent" parameterType="java.lang.String" resultType="com.sise.bookstore.model.entity.Category">
+			SELECT 
+			  * 
+			FROM
+			  category 
+			WHERE parentId = #{parentId}		
+		</select>
+		
+		<insert id="insertCategory">
+			INSERT INTO category (id,`name`,parentId,`desc`)
+			VALUES
+			  (
+			    #{category.id},
+			    #{category.name},
+			    #{category.parentId},
+			    #{category.desc}
+			  )
+			
+		</insert>
+		
+		<update id="updateCategory">
+			UPDATE 
+			  category 
+			SET			 
+			  `name` = #{category.name},
+			  parentId = #{category.parentId},
+			  `desc` = #{category.desc}
+			WHERE id = #{category.id}
+		</update>
+		
+		<select id="selectCategoryById" resultType="com.sise.bookstore.model.entity.Category">
+			SELECT
+				*
+			FROM
+				category
+			WHERE id = #{categoryId}
+		</select>
+		
+		<select id="selectChildrenCountByParent" resultType="int">
+			SELECT 
+			  COUNT(*) 
+			FROM
+			  category 
+			WHERE parentId = #{parentId}
+		</select>
+		
+		
+	</mapper>

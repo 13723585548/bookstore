@@ -1,0 +1,131 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd ">
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 注入securityManager -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 认证提交的地址 -->
+		<property name="loginUrl" value="/login.action" />
+		<!-- 认证成功，统一跳转到home.action,建议不配置，shiro 认证成功会自动跳转到上一个请求路径 -->
+		<property name="successUrl" value="/home.action" />
+		<!-- 通过unauthorizedUrl指定没有权限时跳转的页面 -->
+		<property name="unauthorizedUrl" value="/refuse.jsp" />
+		<!-- 自定义filter -->
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="formAuthenticationFilter" />
+			</map>
+		</property>
+		<!-- 过滤器链定义，从上往下顺序执行，一般将/**放在最下面 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/js/** = anon
+				/images/** = anon
+				/plugin/** = anon
+				/jquery/** = anon
+				/jsp/** = anon
+				/verifyCode.jsp = anon
+				/checkUser.action = anon
+				/checkEmail.action = anon
+				/checkVerifyCode.action = anon
+				/regist.action = anon
+				/findAllCategory.action = anon
+				/findBookByCategory.action = anon
+				/findBookByCombination.action =anon
+				/logout.action = logout
+				/back.action = anon
+				/getAllCategory.action = anon
+				/addCategory.action = anon
+				/editCategory.action = anon
+				/addPrepare.action = anon
+				/ajaxFindChildren.action = anon
+				/addBook.action = anon
+				/loadBook.action = anon
+				/editBook.action = anon
+				<!-- 配置记住我或认证通过可以访问的地址 -->
+				<!-- /home.action = user -->
+				/findOrderById.action = user
+				/paymentPrepare.action = user
+				/confirm.action = user
+				/myOrder.action = user
+				/addCartItem.action =user
+				/findCartItemByUser.action = user
+				/loadCartItems.action = user
+				/** = authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- 自定义form认证过滤器 -->
+	<bean id="formAuthenticationFilter"
+		class="com.sise.bookstore.shiro.filter.CustomFormAuthenticationFilter">
+		<property name="usernameParam" value="userCode" />
+		<property name="passwordParam" value="password" />
+		<property name="rememberMeParam" value="rememberMe" />
+	</bean>
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="customRealm" />
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="rememberMeManager" ref="rememberMeManager" />
+	</bean>
+
+
+	<!-- 自定义realm -->
+	<bean id="customRealm" class="com.sise.bookstore.shiro.realm.CustomRealm">
+		<!-- 将凭证匹配器设置到realm中，realm按照凭证匹配器的要求进行散列 -->
+		<property name="credentialsMatcher" ref="credentialsMatcher" />
+	</bean>
+
+	<!-- 加载数据库配置文件 -->
+	<context:property-placeholder location="classpath:md5.properties"
+		ignore-unresolvable="true" />
+
+	<!-- 凭证匹配器 -->
+	<bean id="credentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="${algorithm}" />
+		<property name="hashIterations" value="${iterations}" />
+	</bean>
+
+	<!-- 缓存管理器 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml" />
+	</bean>
+
+	<!-- 会话管理器 -->
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- session的失效时长，单位毫秒 -->
+		<property name="globalSessionTimeout" value="86400000" />
+		<!-- 删除失效的session -->
+		<property name="deleteInvalidSessions" value="true" />
+	</bean>
+
+	<!-- rememberMeManager管理器，写cookie,取出cookie生成用户信息 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cookie" ref="rememberMeCookie" />
+	</bean>
+	<!-- 记住我 -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="rememberMe" />
+		<!-- 记住我失效时间30天 -->
+		<property name="maxAge" value="2592000" />
+	</bean>
+
+
+</beans>

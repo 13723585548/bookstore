@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sise.bookstore.mapper.OrderItemMapper" >
+  <resultMap id="BaseResultMap" type="com.sise.bookstore.model.entity.OrderItem" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="subtotal" property="subtotal" jdbcType="DECIMAL" />
+    <result column="bookId" property="bookId" jdbcType="CHAR" />
+    <result column="bookName" property="bookName" jdbcType="VARCHAR" />
+    <result column="currPrice" property="currPrice" jdbcType="DECIMAL" />
+    <result column="image_b" property="imageB" jdbcType="VARCHAR" />
+    <result column="orderId" property="orderId" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, quantity, subtotal, bookId, bookName, currPrice, image_b, orderId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sise.bookstore.model.entity.OrderItemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderitem
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from orderitem
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sise.bookstore.model.entity.OrderItemExample" >
+    delete from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sise.bookstore.model.entity.OrderItem" >
+    insert into orderitem (id, quantity, subtotal, 
+      bookId, bookName, currPrice, 
+      image_b, orderId)
+    values (#{id,jdbcType=CHAR}, #{quantity,jdbcType=INTEGER}, #{subtotal,jdbcType=DECIMAL}, 
+      #{bookId,jdbcType=CHAR}, #{bookName,jdbcType=VARCHAR}, #{currPrice,jdbcType=DECIMAL}, 
+      #{imageB,jdbcType=VARCHAR}, #{orderId,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sise.bookstore.model.entity.OrderItem" >
+    insert into orderitem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="subtotal != null" >
+        subtotal,
+      </if>
+      <if test="bookId != null" >
+        bookId,
+      </if>
+      <if test="bookName != null" >
+        bookName,
+      </if>
+      <if test="currPrice != null" >
+        currPrice,
+      </if>
+      <if test="imageB != null" >
+        image_b,
+      </if>
+      <if test="orderId != null" >
+        orderId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="subtotal != null" >
+        #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="bookId != null" >
+        #{bookId,jdbcType=CHAR},
+      </if>
+      <if test="bookName != null" >
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="currPrice != null" >
+        #{currPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="imageB != null" >
+        #{imageB,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sise.bookstore.model.entity.OrderItemExample" resultType="java.lang.Integer" >
+    select count(*) from orderitem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update orderitem
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=CHAR},
+      </if>
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.subtotal != null" >
+        subtotal = #{record.subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.bookId != null" >
+        bookId = #{record.bookId,jdbcType=CHAR},
+      </if>
+      <if test="record.bookName != null" >
+        bookName = #{record.bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currPrice != null" >
+        currPrice = #{record.currPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.imageB != null" >
+        image_b = #{record.imageB,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        orderId = #{record.orderId,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update orderitem
+    set id = #{record.id,jdbcType=CHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      subtotal = #{record.subtotal,jdbcType=DECIMAL},
+      bookId = #{record.bookId,jdbcType=CHAR},
+      bookName = #{record.bookName,jdbcType=VARCHAR},
+      currPrice = #{record.currPrice,jdbcType=DECIMAL},
+      image_b = #{record.imageB,jdbcType=VARCHAR},
+      orderId = #{record.orderId,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sise.bookstore.model.entity.OrderItem" >
+    update orderitem
+    <set >
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="subtotal != null" >
+        subtotal = #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="bookId != null" >
+        bookId = #{bookId,jdbcType=CHAR},
+      </if>
+      <if test="bookName != null" >
+        bookName = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="currPrice != null" >
+        currPrice = #{currPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="imageB != null" >
+        image_b = #{imageB,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        orderId = #{orderId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sise.bookstore.model.entity.OrderItem" >
+    update orderitem
+    set quantity = #{quantity,jdbcType=INTEGER},
+      subtotal = #{subtotal,jdbcType=DECIMAL},
+      bookId = #{bookId,jdbcType=CHAR},
+      bookName = #{bookName,jdbcType=VARCHAR},
+      currPrice = #{currPrice,jdbcType=DECIMAL},
+      image_b = #{imageB,jdbcType=VARCHAR},
+      orderId = #{orderId,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

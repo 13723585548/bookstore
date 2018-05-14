@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+	<mapper namespace="com.sise.bookstore.mapper.custom.CartItemMapperCustom">
+	
+		<resultMap type="com.sise.bookstore.model.result.CartItemCustom" id="cartItemResultMap">
+			<id column="id" property="id" />
+			<result column="quantity" property="quantity" />
+			<association property="book" javaType="com.sise.bookstore.model.entity.Book" 
+					select="com.sise.bookstore.mapper.BookMapper.selectByPrimaryKey" column="bookId">
+			</association>
+			<association property="user" javaType="com.sise.bookstore.model.entity.User" 
+					select="com.sise.bookstore.mapper.UserMapper.selectByPrimaryKey" column="userId">
+			</association>
+		</resultMap>
+		
+		<sql id="where_in_foreach">
+			<if test="cartItemIds != null">			
+				<!-- 实现拼接：AND ID IN (1,10,16) -->
+				<foreach collection="cartItemIds" item="cartItemId" open="AND ID IN (" close=")" separator="," >
+					#{cartItemId}
+				</foreach>
+			</if>
+		</sql>
+	
+		<!-- 通过用户查询购物车条款 -->
+		<select id="selectCartItemByUser" resultMap="cartItemResultMap">
+			SELECT 
+			  * 
+			FROM
+			  cartItem,
+			  book
+			WHERE cartItem.`bookId` = book.`id` 
+			  AND userId = #{userId}
+			ORDER BY cartItem.`orderBy` 
+		</select>
+		
+		<!-- 根据主键查询 -->
+		<select id="selectCartItemByPrimaryKey" resultMap="cartItemResultMap">
+			SELECT 
+			  * 
+			FROM
+			  cartItem 
+			WHERE id = #{cartItemId} 
+		</select>
+		
+		<!-- 批量删除 -->
+		<delete id="batchDelete">
+	        DELETE FROM cartItem 
+	        <where>
+		        <include refid="where_in_foreach" />
+	        </where>
+	    </delete>
+	    
+	    <!-- 加载购物车条款 -->
+	    <select id="loadCartItems" resultMap="cartItemResultMap">
+	    	SELECT 
+			  * 
+			FROM
+			  cartItem,book 
+			<where>
+				cartItem.`bookId` = book.`id` 
+				<foreach collection="cartItemIds" item="cartItemId" open="AND cartitem.`id` IN (" close=")" separator="," >
+					#{cartItemId}		    
+				</foreach>
+			</where>
+	    </select>
+	    
+	</mapper>

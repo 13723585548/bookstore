@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+	<mapper namespace="com.sise.bookstore.mapper.custom.BookMapperCustom">
+		<!-- 根据分类查询图书 -->
+		<select id="selectBookByPage" resultType="com.sise.bookstore.model.entity.Book">
+			SELECT 
+			  *,
+			  image_w imageW,
+			  image_b imageB 
+			FROM
+			  book  
+			<if test="condition != null">
+				WHERE ${condition} = #{value} 
+			</if>
+			LIMIT #{pageCode},#{pageSize} 
+		</select>
+		
+		<!-- 根据条件查询图书总记录数 -->
+		<select id="selectTotalRecord" resultType="int">
+			SELECT 
+			  COUNT(*) 
+			FROM
+			  book 
+			<if test="condition != null">
+				WHERE ${condition} = #{value}
+			</if>
+		</select>
+		
+		<!-- 多条件组合查询 -->
+		<select id="selectBookByCombination" resultType="com.sise.bookstore.model.entity.Book">
+			SELECT 
+			  *,
+			  image_w imageW,
+			  image_b imageB
+			FROM
+			  book 
+			<if test="conditions != null and conditions.size() != 0">
+				<where>
+					<foreach collection="conditions" item="condition"  separator="AND">
+						${condition.name} ${condition.operator} CONCAT('%',#{condition.value},'%' )
+					</foreach>
+				</where>
+			</if>
+			LIMIT #{pageCode},#{pageSize} 
+		</select>
+		
+		<!-- 多条件查询图书总记录数 -->
+		<select id="selectTotalRecordByCombination" resultType="int"> 
+			SELECT 
+			  COUNT(*) 
+			FROM
+			  book 
+			<if test="conditions != null and conditions.size() != 0">
+				<where>
+					<foreach collection="conditions" item="condition"  separator="AND">
+						${condition.name} ${condition.operator} CONCAT('%',#{condition.value},'%' )
+					</foreach>
+				</where>
+			</if>
+		</select>
+		
+		<select id="selectBookCountByCategory" resultType="int">
+			SELECT 
+			  COUNT(*) 
+			FROM 
+				book
+			WHERE categoryId = #{categoryId}		
+		</select>
+		
+		<insert id="insertBook">
+			INSERT INTO book 
+			VALUES
+			  (
+			  	#{book.id},
+			  	#{book.name},
+			  	#{book.author},
+			  	#{book.price},
+			  	#{book.currPrice},
+			  	#{book.discount},
+			  	#{book.press},
+			  	#{book.publishTime},
+			  	#{book.edition},
+			  	#{book.pageNum},
+			  	#{book.wordNum},
+			  	#{book.printTime},
+			  	#{book.bookSize},
+			  	#{book.paper},
+			  	#{book.categoryId},
+			  	#{book.imageW},
+			  	#{book.imageB},
+			  	#{book.orderBy}
+			  )
+		</insert>
+		
+		<update id="updateBook">
+			UPDATE 
+			  book 
+			SET			 
+			  	`name` = #{book.name},
+			  	author = #{book.author},
+			  	price = #{book.price},
+			  	currPrice = #{book.currPrice},
+			  	discount = #{book.discount},
+			  	press = #{book.press},
+			  	publishTime = #{book.publishTime},
+			  	edition = #{book.edition},
+			  	pageNum = #{book.pageNum},
+			  	wordNum = #{book.wordNum},
+			  	printTime = #{book.printTime},
+			  	bookSize = #{book.bookSize},
+			  	paper = #{book.paper},
+			  	categoryId = #{book.categoryId},
+			  	image_w = #{book.imageW},
+			  	image_b = #{book.imageB}
+			WHERE id = #{book.id}
+		</update>
+	</mapper>

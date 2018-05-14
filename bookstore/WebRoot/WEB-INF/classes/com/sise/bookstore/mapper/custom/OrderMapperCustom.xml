@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+	<mapper namespace="com.sise.bookstore.mapper.custom.OrderMapperCustom">
+	
+		<resultMap type="com.sise.bookstore.model.result.OrderCustom" id="orderResultMap">
+			<id column="id" property="id" />
+			<result column="time" property="time" />
+			<result column="total" property="total" />
+			<result column="status" property="status" />
+			<result column="address" property="address" />
+			
+			<association property="owner" javaType="com.sise.bookstore.model.entity.User" 
+					select="com.sise.bookstore.mapper.UserMapper.selectByPrimaryKey" column="userId">
+			</association>
+			
+			<collection property="orderItemList" ofType="com.sise.bookstore.model.entity.OrderItem"
+					select="com.sise.bookstore.mapper.custom.OrderItemMapperCustom.selectOrderItemByOrder" column="id">
+			</collection>
+			
+		</resultMap>
+
+
+		<!-- 通过用户查询订单 -->
+		<select id="selectOrderByUser" resultMap="orderResultMap">
+			SELECT 
+			  *
+			FROM
+			  `order` 
+			WHERE userId = #{userId}
+			ORDER BY `order`.`time` 
+			LIMIT #{pageCode},#{pageSize} 
+		</select>
+		
+		<!-- 查询总记录数 -->
+		<select id="selectTotalRecord" resultType="int">
+			SELECT 
+			  COUNT(*) 
+			FROM
+			  `order` 
+			WHERE userId = #{userId}
+		</select>
+		
+		<!-- 插入 -->
+		<insert id="insertOrder">
+			INSERT INTO `order`
+			VALUES
+			(
+				#{order.id},
+				#{order.time},
+				#{order.total},
+				#{order.status},
+				#{order.address},
+				#{order.userId}
+			)
+		</insert>
+    
+    	<!-- 查询订单详情 -->
+    	<select id="selectOrderById" resultMap="orderResultMap">
+    		SELECT 
+			  * 
+			FROM
+			  `order` 
+			WHERE id = #{orderId}
+    	</select>
+    	
+    	<!-- 查询订单状态 -->
+    	<select id="selectStatus" resultType="int">
+    		SELECT 
+			  `status` 
+			FROM
+			  `order` 
+			WHERE id = #{orderId}
+    	</select>
+    	
+    	<update id="updateStatus">
+    		UPDATE 
+			  `order` 
+			SET
+			  `status` = #{status}
+			WHERE id = #{orderId}
+    	</update>
+    	
+    	<select id="selectAll" resultMap="orderResultMap">
+    		SELECT 
+			  * 
+			FROM
+			  `order` 
+			ORDER BY `order`.`time` 
+			LIMIT #{pageCode},#{pageSize} 
+    	</select>
+    	
+    	<select id="selectAllRecord" resultType="int">
+    		SELECT 
+			  COUNT(*) 
+			FROM
+			  `order` 
+    	</select>
+    	
+    	<select id="selectOrderByStatus" resultMap="orderResultMap">
+    		SELECT 
+			  *
+			FROM
+			  `order` 
+			 WHERE `status` = #{status}
+			 LIMIT #{pageCode},#{pageSize} 
+    	</select>
+    	
+    	<select id="selectTotalRecordByStatus" resultType="int">
+    		SELECT 
+			   COUNT(*)
+			FROM
+			  `order` 
+			 WHERE `status` = #{status}
+    	</select>
+    	
+	</mapper>
